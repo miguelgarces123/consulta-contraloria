@@ -22,14 +22,15 @@ class ConsultaContraloriaByNit extends ConsultaContraloria implements ConsultaCo
      * Funcion para consultar por nit
      * @author Miguel Garces
      * @param Int $nit Nit que se desea consultar
+     * @param Int $tipoDocumento identificador del tipo de documento en la contraloria
      * @return Object
      */
-    public function consultar(Int $nit) {
+    public function consultar(Int $nit, $tipoDocumento = 1) {
 
         $crawler = $this->client->request('GET', $this->enlace_home);
         $form = $crawler->filter('#ctl01')->form();
         $form->setValues([
-            'ctl00$MainContent$ddlTipoDocumento' => 1,
+            'ctl00$MainContent$ddlTipoDocumento' => $tipoDocumento,
             'ctl00$MainContent$txtNumeroDocumento' => $nit
         ]);
 
@@ -47,10 +48,12 @@ class ConsultaContraloriaByNit extends ConsultaContraloria implements ConsultaCo
         $res = $this->client->getInternalResponse()->getContent();
 
         if(!empty($res)){
-            $file = 'miguelgarces/contraloria/'.(string)$nit.'.pdf';
-            Storage::disk('public')->put($file, $res);
-            $test = Pdf::getText(public_path('storage/'.$file), '/usr/local/bin/pdftotext');
-            dd($test);
+            $file = config('contraloria.folder_path_save_file').(string)$nit.'.pdf';
+            Storage::disk(config('contraloria.disk_storage'))->put($file, $res);
+            $content = Pdf::getText(public_path('storage/'.$file), config('contraloria.path_pdftotext'));
+            if(!empty($content)) {
+                return $content;
+            }
         }
 
         throw new ResponseEmpty('Respuesta vacia', $res);

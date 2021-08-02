@@ -27,7 +27,9 @@ class ContraloriaServiceProvider extends ServiceProvider
      */
     public function boot()
     {
- 
+        $this->publishes([
+            __DIR__.'/../config/contraloria.php' => config_path('contraloria.php'),
+        ]);
     }
  
 }
