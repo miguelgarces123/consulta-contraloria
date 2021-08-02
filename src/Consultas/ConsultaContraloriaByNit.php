@@ -34,16 +34,9 @@ class ConsultaContraloriaByNit extends ConsultaContraloria implements ConsultaCo
             'ctl00$MainContent$txtNumeroDocumento' => $nit
         ]);
 
-        // Creacion de input de ctl00$MainContent$btnBuscar
-        $domDocument = new \DOMDocument;
-        $domElement = $domDocument->createElement('input');
-        $domElement->setAttribute('name', 'ctl00$MainContent$btnBuscar');
-        $domElement->setAttribute('value', 'Buscar');
-        $formInput = new InputFormField($domElement);
-        $form->set($formInput);
+        $this->setInput($form);
         $form->getFormNode()->setAttribute('action', $this->enlace);
 
-        //dd($form->getValues());
         $this->client->submit($form);
         $res = $this->client->getInternalResponse()->getContent();
 
@@ -61,18 +54,18 @@ class ConsultaContraloriaByNit extends ConsultaContraloria implements ConsultaCo
 
 
     /**
-     * Funcion crear input de consulta a RUES
+     * Funcion crear input de consulta a Contraloria
      * @author Miguel Garces
      * @param Form $form Formulario preconstruido
      * @param Int $nit Nit que se desea consultar
      * @return Void
      */
-    private function setInput(Form &$form, Int $nit) : void{
+    private function setInput(Form &$form) : void{
+        // Creacion de input de ctl00$MainContent$btnBuscar
         $domDocument = new \DOMDocument;
-        // Creacion de input de nit
         $domElement = $domDocument->createElement('input');
-        $domElement->setAttribute('name', $this->nameField);
-        $domElement->setAttribute('value', $nit);
+        $domElement->setAttribute('name', 'ctl00$MainContent$btnBuscar');
+        $domElement->setAttribute('value', 'Buscar');
         $formInput = new InputFormField($domElement);
         $form->set($formInput);
     }
