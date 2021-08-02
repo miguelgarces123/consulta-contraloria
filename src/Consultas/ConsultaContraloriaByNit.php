@@ -45,6 +45,9 @@ class ConsultaContraloriaByNit extends ConsultaContraloria implements ConsultaCo
             Storage::disk(config('contraloria.disk_storage'))->put($file, $res);
             $content = Pdf::getText(Storage::disk(config('contraloria.disk_storage'))->path($file), config('contraloria.path_pdftotext'));
             if(!empty($content)) {
+                if(config('contraloria.delete_file_after_read')){
+                    Storage::disk(config('contraloria.disk_storage'))->delete($file);
+                }
                 return $content;
             }
         }

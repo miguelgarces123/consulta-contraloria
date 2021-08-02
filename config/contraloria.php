@@ -33,4 +33,14 @@ return [
     */
     'path_pdftotext' => ENV('CONTRALORIA_PATH_PDFTOTEXT', '/usr/local/bin/pdftotext'),
     
+    /*
+    |--------------------------------------------------------------------------
+    | DELETE FILE AFTER READ
+    |--------------------------------------------------------------------------
+    |
+    | Delete the generated pdf file after reading it
+    |
+    */
+    'delete_file_after_read' => ENV('CONTRALORIA_DELETE_FILE_AFTER_READ', true),
+    
 ];
